@@ -1,15 +1,16 @@
 /******************************************************************************
-* Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114 
-* - Operating Systems Principles, Semester 2, 2019. 
-******************************************************************************/
+ * Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114
+ * - Operating Systems Principles, Semester 2, 2019.
+ ******************************************************************************/
 
 #include "list.h"
 
 /**
  * initialise the list to be an empty list
  **/
-void list_init(struct list* thelist, int (*cmp)(const void*, const void*),
-               void (*data_free)(void*))
+void
+list_init(struct list* thelist, int (*cmp)(const void*, const void*),
+          void (*data_free)(void*))
 {
     /* all parameters passed in must not be NULL */
     assert(thelist != NULL);
@@ -32,12 +33,12 @@ void list_init(struct list* thelist, int (*cmp)(const void*, const void*),
 /**
  * allocate memory for the list and initialise it
  **/
-struct list* list_make(int (*cmp)(const void*, const void*),
-                       void (*data_free)(void*))
+struct list*
+list_make(int (*cmp)(const void*, const void*), void (*data_free)(void*))
 {
     struct list* thelist;
     /* allocate space for the list */
-    thelist = (struct list*)sbrk(sizeof(struct list));
+    thelist = (struct list*)malloc(sizeof(struct list));
     if (!thelist)
     {
         perror("alloc");
@@ -53,10 +54,11 @@ struct list* list_make(int (*cmp)(const void*, const void*),
  * allocate space for the node in a linked list - that way we only write
  * this code once
  **/
-static struct node* new_node(void* data)
+static struct node*
+new_node(void* data)
 {
     /* allocate space fore the new node */
-    struct node* new = (struct node*)sbrk(sizeof(struct node));
+    struct node* new = (struct node*)malloc(sizeof(struct node));
     if (!new)
     {
         perror("alloc");
@@ -71,7 +73,8 @@ static struct node* new_node(void* data)
 }
 
 /* free the node pointer such as when popping data */
-static void node_free(struct node* thenode)
+static void
+node_free(struct node* thenode)
 {
     /* free(thenode);*/
 }
@@ -79,7 +82,8 @@ static void node_free(struct node* thenode)
 /**
  * prepend an element to the list
  **/
-bool list_push_front(struct list* thelist, void* data)
+bool
+list_push_front(struct list* thelist, void* data)
 {
     /* allocate space for the data */
     struct node* new = new_node(data);
@@ -108,7 +112,8 @@ bool list_push_front(struct list* thelist, void* data)
 /**
  * add to the end of the list
  **/
-bool list_push_back(struct list* thelist, void* data)
+bool
+list_push_back(struct list* thelist, void* data)
 {
     struct node* newnode;
     /* ensure none of the parameters are NULL */
@@ -144,7 +149,8 @@ bool list_push_back(struct list* thelist, void* data)
 /**
  * insert the data in sorted order by the default sort mechanism
  **/
-bool list_push_sorted(struct list* thelist, void* data)
+bool
+list_push_sorted(struct list* thelist, void* data)
 {
     struct node* new;
     assert(thelist);
@@ -187,8 +193,8 @@ bool list_push_sorted(struct list* thelist, void* data)
  * inserts an element into the list sorted based on the comparison function
  * provided
  **/
-bool list_push_sorted_cmp(struct list* thelist, void* data,
-                          int (*cmp)(void*, void*))
+bool
+list_push_sorted_cmp(struct list* thelist, void* data, int (*cmp)(void*, void*))
 {
     struct node* new;
     assert(thelist);
@@ -230,7 +236,8 @@ bool list_push_sorted_cmp(struct list* thelist, void* data,
 /**
  * remove an element from the front of the list
  **/
-void* list_pop_front(struct list* thelist)
+void*
+list_pop_front(struct list* thelist)
 {
     struct node* container = thelist->head;
     void* data;
@@ -264,7 +271,8 @@ void* list_pop_front(struct list* thelist)
 /**
  * remove an element from the end of the list
  **/
-void* list_pop_back(struct list* thelist)
+void*
+list_pop_back(struct list* thelist)
 {
     /**
      * remove the last element from the list
@@ -300,7 +308,8 @@ void* list_pop_back(struct list* thelist)
  * finds the node that matches the data passed in based on the default
  * comparator provided when the list was initialised
  **/
-void* list_pop_find(struct list* thelist, const void* data)
+void*
+list_pop_find(struct list* thelist, const void* data)
 {
     struct node* current;
     struct node* found = NULL;
@@ -336,8 +345,9 @@ void* list_pop_find(struct list* thelist, const void* data)
  * find the node that matches our requirement based on the comparison function
  *passed in
  **/
-void* list_pop_find_cmp(struct list* thelist, const void* data,
-                        int (*cmp)(const void*, const void*))
+void*
+list_pop_find_cmp(struct list* thelist, const void* data,
+                  int (*cmp)(const void*, const void*))
 {
     struct node* current;
     struct node* found = NULL;
@@ -405,7 +415,8 @@ void* list_pop_find_cmp(struct list* thelist, const void* data,
 /**
  * frees the list
  **/
-void list_free(struct list* thelist)
+void
+list_free(struct list* thelist)
 {
     struct node* current;
     /* iterate over the list */
@@ -430,7 +441,8 @@ void list_free(struct list* thelist)
 /**
  * iterate over the list and print each element using the print_func argument
  **/
-void list_print(struct list* thelist, int (*print_func)(const void*))
+void
+list_print(struct list* thelist, int (*print_func)(const void*))
 {
     struct node* curr;
     for (curr = LL_BEGIN(thelist); curr != LL_END(thelist); LL_NEXT(curr))
@@ -442,8 +454,8 @@ void list_print(struct list* thelist, int (*print_func)(const void*))
 /**
  * remove the smallest element from the list as decided
  **/
-void* list_pop_min_cmp(struct list* thelist,
-                       int (*cmp)(const void*, const void*))
+void*
+list_pop_min_cmp(struct list* thelist, int (*cmp)(const void*, const void*))
 {
     struct node* min_node = NULL;
     struct node* curr;
@@ -491,8 +503,8 @@ void* list_pop_min_cmp(struct list* thelist,
 /**
  * remove the largest element from the list
  **/
-void* list_pop_max_cmp(struct list* thelist,
-                       int (*cmp)(const void*, const void*))
+void*
+list_pop_max_cmp(struct list* thelist, int (*cmp)(const void*, const void*))
 {
     struct node* curr;
     struct node* max_node = NULL;
@@ -543,7 +555,8 @@ void* list_pop_max_cmp(struct list* thelist,
  * find the smallest element based on the default comparator provided when
  * initialising the list
  **/
-void* list_pop_min(struct list* thelist)
+void*
+list_pop_min(struct list* thelist)
 {
     return list_pop_min_cmp(thelist, thelist->cmp);
 }
@@ -552,7 +565,8 @@ void* list_pop_min(struct list* thelist)
  * find the largest element of the list based on the default comparator
  * provided when initialising the list
  **/
-void* list_pop_max(struct list* thelist)
+void*
+list_pop_max(struct list* thelist)
 {
     return list_pop_max_cmp(thelist, thelist->cmp);
 }
@@ -560,8 +574,9 @@ void* list_pop_max(struct list* thelist)
 /**
  * perform some operation on the linked list, such as a global search
  **/
-void list_for_each(struct list* thelist, const void* desired, void** best,
-                   void (*perform)(void*, void**, const void*))
+void
+list_for_each(struct list* thelist, const void* desired, void** best,
+              void (*perform)(void*, void**, const void*))
 {
     struct node* curr;
 
@@ -574,8 +589,9 @@ void list_for_each(struct list* thelist, const void* desired, void** best,
 /**
  * remove the item specified from the list based on the comparator passed in
  **/
-bool list_remove(struct list* thelist, const void* item,
-                 int cmp(const void*, const void*))
+bool
+list_remove(struct list* thelist, const void* item,
+            int cmp(const void*, const void*))
 {
     struct node* curr;
     /* find the node that contains the item */

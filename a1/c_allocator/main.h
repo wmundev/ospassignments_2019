@@ -1,6 +1,6 @@
 /******************************************************************************
-* Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114
-* - Operating Systems Principles, Semester 2, 2019.
+* Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114 
+* - Operating Systems Principles, Semester 2, 2019. 
 ******************************************************************************/
 
 #include "alloc.h"
@@ -8,7 +8,6 @@
 #include "osp_string.h"
 #include <assert.h>
 #include <ctype.h>
-#include <errno.h>
 #include <float.h>
 #include <limits.h>
 #include <stdbool.h>
@@ -34,8 +33,8 @@ typedef char names_list[TOTAL_NAMES][NAME_LEN + 1];
  **/
 struct falsible_long
 {
-        bool success;
-        long data;
+    bool success;
+    long data;
 };
 
 /**
@@ -43,7 +42,7 @@ struct falsible_long
  **/
 typedef struct
 {
-        long first, second;
+    long first, second;
 } range;
 /**
  * the data we get back from a call to process_args() when it succeeds.
@@ -52,8 +51,8 @@ typedef struct
  **/
 struct args_result
 {
-        size_t array_size;
-        enum strategy thestrategy;
+    size_t array_size;
+    enum strategy thestrategy;
 };
 
 /* default allowed array size range - between 0 and the largest int */
@@ -64,7 +63,7 @@ struct args_result
  **/
 enum arg_option
 {
-        AO_SIZE = 's',
-        AO_APPROACH = 'a'
+    AO_SIZE = 's',
+    AO_APPROACH = 'a'
 };
 #endif
