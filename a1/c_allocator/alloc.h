@@ -1,8 +1,7 @@
 /******************************************************************************
-* Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114 
-* - Operating Systems Principles, Semester 2, 2019. 
-******************************************************************************/
-
+ * Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114
+ * - Operating Systems Principles, Semester 2, 2019.
+ ******************************************************************************/
 
 #include "list.h"
 #include <stdio.h>
@@ -10,7 +9,8 @@
 #ifndef ALLOC_H
 #define ALLOC_H
 void* alloc(size_t);
-void dealloc(void*);
+void
+dealloc(void*);
 
 enum strategy
 {
@@ -25,7 +25,13 @@ struct size_pair
     size_t alloc, free;
 };
 
-struct size_pair get_list_sizes(void);
+struct size_pair
+get_list_sizes(void);
 
 void set_strategy(enum strategy);
+
+void
+print_alloc_list(void);
+void
+print_free_list(void);
 #endif

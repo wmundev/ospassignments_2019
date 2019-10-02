@@ -1,7 +1,7 @@
 /******************************************************************************
-* Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114 
-* - Operating Systems Principles, Semester 2, 2019. 
-******************************************************************************/
+ * Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114
+ * - Operating Systems Principles, Semester 2, 2019.
+ ******************************************************************************/
 
 #include "main.h"
 
@@ -9,7 +9,8 @@ range array_size_range = { 0, INT_MAX };
 /**
  * load in the string test data
  **/
-bool populate_names(names_list array)
+bool
+populate_names(names_list array)
 {
     /* open file and check that succeeded */
     struct string line;
@@ -40,13 +41,15 @@ bool populate_names(names_list array)
 /**
  * display error message when this program has been invoked incorrectly.
  **/
-void display_usage(void)
+void
+display_usage(void)
 {
     fprintf(stderr, "Please run this program as follows: \n");
     fprintf(stderr, "\t./allocate -s <size> -a <algorithm>\n");
-    fprintf(stderr, "Where size is the size of each array to allocate and \n"
-                    "\"algorithm\" should be one of \"firstfit\", \"bestfit\" "
-                    "and \"worstfit\".\n");
+    fprintf(stderr,
+            "Where size is the size of each array to allocate and \n"
+            "\"algorithm\" should be one of \"firstfit\", \"bestfit\" "
+            "and \"worstfit\".\n");
 }
 
 /**
@@ -54,7 +57,8 @@ void display_usage(void)
  * the range of the number that is allowed. min being the minimum and max
  * being the maximum.
  **/
-struct falsible_long strtonum(const char* input, const range* allowed_range)
+struct falsible_long
+strtonum(const char* input, const range* allowed_range)
 {
     struct falsible_long result;
     long lnum;
@@ -79,7 +83,9 @@ struct falsible_long strtonum(const char* input, const range* allowed_range)
     {
         fprintf(stderr,
                 "Error: %s is not a number in the allowed range of %ld-%ld.\n",
-                input, allowed_range->first, allowed_range->second);
+                input,
+                allowed_range->first,
+                allowed_range->second);
         result.success = false;
         return result;
     }
@@ -94,7 +100,8 @@ struct falsible_long strtonum(const char* input, const range* allowed_range)
  * "bestfit" or "worstfit". On error, the function returns the constant
  * INVALID_STRATEGY.
  **/
-enum strategy strtostrat(const char strategy_string[])
+enum strategy
+strtostrat(const char strategy_string[])
 {
     const int NUM_STRATEGIES = 3;
     int strat_count;
@@ -115,7 +122,8 @@ enum strategy strtostrat(const char strategy_string[])
 }
 
 /* multiply a fractional double number by 4 billion or thereabouts */
-double expand_fraction(const double fraction)
+double
+expand_fraction(const double fraction)
 {
     return fraction * (((long)1) << 32);
 }
@@ -123,7 +131,8 @@ double expand_fraction(const double fraction)
 /**
  * generate a random double in the range of 0 to 4 billion or thereabouts
  **/
-double rand_double(void)
+double
+rand_double(void)
 {
     /* generate a random number between 0 and 1 */
     double fraction = rand() / (double)RAND_MAX;
@@ -134,7 +143,8 @@ double rand_double(void)
 /**
  * processes command line arguments down to a result on success
  **/
-bool process_args(int argc, char* argv[], struct args_result* result)
+bool
+process_args(int argc, char* argv[], struct args_result* result)
 {
     /* stores the current option, for use with getopt */
     int current_option;
@@ -189,7 +199,8 @@ bool process_args(int argc, char* argv[], struct args_result* result)
     return true;
 }
 
-long tvtolong(struct timeval tv)
+long
+tvtolong(struct timeval tv)
 {
     return tv.tv_sec * 1000000 + tv.tv_usec;
 }
@@ -200,7 +211,8 @@ long tvtolong(struct timeval tv)
 /**
  * report the performance of one round of memory allocation
  **/
-void report(void)
+void
+report(void)
 {
     struct rusage theusage;
     struct size_pair thesizes;
@@ -210,12 +222,14 @@ void report(void)
     thesizes = get_list_sizes();
     printf("the alloc list has %ld nodes and the free list has %ld "
            "nodes.\n",
-           thesizes.alloc, thesizes.free);
+           thesizes.alloc,
+           thesizes.free);
     getrusage(RUSAGE_SELF, &theusage);
     printf("This iteration took: %f milliseconds.\n",
            (double)(tvtolong(theusage.ru_utime) - elapsed) / 1000);
     elapsed = tvtolong(theusage.ru_utime);
     printf("physical memory in use: %ld\n", theusage.ru_maxrss);
+    print_alloc_list();
 }
 
 /**
@@ -238,7 +252,8 @@ void report(void)
         (TIME) += end - start;                                                 \
     }
 
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
     size_t arraysize;
     size_t count;

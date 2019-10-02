@@ -1,7 +1,7 @@
 /******************************************************************************
-* Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114 
-* - Operating Systems Principles, Semester 2, 2019. 
-******************************************************************************/
+ * Assignment 1 Solution provided by Paul Miller as part of COSC1112/1114
+ * - Operating Systems Principles, Semester 2, 2019.
+ ******************************************************************************/
 
 #include "alloc.h"
 #include "memory_chunk.h"
@@ -34,27 +34,28 @@ alloc_approach theapproach;
  **/
 struct memory_pair
 {
-    struct memory_chunk* first, *second;
+    struct memory_chunk *first, *second;
 };
 
 /**
  * function that splits a chunk and returns the split pair
  **/
-struct memory_pair split(struct memory_chunk* mem, size_t sizefirst)
+struct memory_pair
+split(struct memory_chunk* mem, size_t sizefirst)
 {
     struct memory_pair thepair;
     /* store the pointers to the memory chunks */
     thepair.first = mem;
     thepair.second = chunk_from_split(mem, sizefirst);
     /* reduce the size of the first chunk by the size of the second chunk */
-    thepair.first->size -= thepair.second->size;
     return thepair;
 }
 
 /**
  * function that does the general allocation of memory
  **/
-void* alloc(size_t size)
+void*
+alloc(size_t size)
 {
     /**
      * always allocate new memory if the list of free blocks is empty
@@ -88,7 +89,8 @@ void* alloc(size_t size)
  * general memory comparison function - are the two memory addresses in question
  *the same ?
  **/
-int mymemcmp(const void* chunk, const void* mem)
+int
+mymemcmp(const void* chunk, const void* mem)
 {
     const struct memory_chunk* mchunk = chunk;
     return ((ssize_t)mchunk->memory) - ((ssize_t)mem);
@@ -100,7 +102,8 @@ int mymemcmp(const void* chunk, const void* mem)
  * either of these cased abort. Otherwise, remove the chunk from the allocations
  * list and add it to the free list.
  **/
-void dealloc(void* mem)
+void
+dealloc(void* mem)
 {
     /**
      * find the chunk
@@ -144,7 +147,8 @@ void dealloc(void* mem)
 /**
  * comparison function for first fit - we want the first chunk that matches
  **/
-int first_fit_cmp(const void* chunk, const void* sizeptr)
+int
+first_fit_cmp(const void* chunk, const void* sizeptr)
 {
     const struct memory_chunk* thechunk = chunk;
     const size_t* size = sizeptr;
@@ -154,7 +158,8 @@ int first_fit_cmp(const void* chunk, const void* sizeptr)
 /**
  * implementation of the first fit algorithm
  **/
-void* first_fit(size_t size)
+void*
+first_fit(size_t size)
 {
     /* find the first chunk that meets the allocation request */
     struct memory_chunk* foundchunk =
@@ -185,7 +190,8 @@ void* first_fit(size_t size)
 /**
  * implementation of the worst fit algorithm
  **/
-void* worst_fit(size_t size)
+void*
+worst_fit(size_t size)
 {
     /* find the largest chunk */
     struct memory_chunk* foundchunk = list_pop_max(&free_list);
@@ -222,7 +228,7 @@ void* worst_fit(size_t size)
     {
         struct memory_pair splitpair = split(foundchunk, size);
         list_push_back(&alloc_list, splitpair.first);
-        list_push_back(&alloc_list, splitpair.second);
+        list_push_back(&free_list, splitpair.second);
         return splitpair.first->memory;
     }
     list_push_back(&alloc_list, foundchunk);
@@ -233,7 +239,8 @@ void* worst_fit(size_t size)
  * helper function that decided whether the chunk we are currently looking at
  * is the best we have seen so far
  **/
-void setbestfit(void* chunk, void** best, const void* desired)
+void
+setbestfit(void* chunk, void** best, const void* desired)
 {
     /* we need to assign each pointer to the appropriate pointer type so we can
      * get at the data stored therein */
@@ -259,7 +266,8 @@ void setbestfit(void* chunk, void** best, const void* desired)
 /**
  * implementation of the best fir algorithm
  **/
-void* best_fit(size_t size)
+void*
+best_fit(size_t size)
 {
     struct memory_chunk* bestchunk = NULL;
     void* best = bestchunk;
@@ -295,7 +303,8 @@ void* best_fit(size_t size)
 /**
  * sets the strategy and does initial setup of the allocator
  **/
-void set_strategy(enum strategy astrategy)
+void
+set_strategy(enum strategy astrategy)
 {
     thestrategy = astrategy;
     /* initialise the lists used for memory management */
@@ -322,10 +331,19 @@ void set_strategy(enum strategy astrategy)
 /**
  * returns the list sizes back to main or whereever it's needed.
  **/
-struct size_pair get_list_sizes(void)
+struct size_pair
+get_list_sizes(void)
 {
     struct size_pair thesizes;
     thesizes.alloc = alloc_list.size;
     thesizes.free = free_list.size;
     return thesizes;
 }
+
+void
+print_alloc_list(void)
+{
+    list_print(&alloc_list, memory_chunk_print);
+}
+void
+print_free_list(void);
